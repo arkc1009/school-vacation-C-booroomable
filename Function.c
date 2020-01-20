@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
-
+#include <stdlib.h>
 #define MAX_Y 45
 #define MAX_X 45
 #define RED SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE), 12);
@@ -118,10 +118,13 @@ int scan_dr(int x, int y) {
 	else if(x<40 && y<4) return U;
 	else if(x>40 && y>40) return D;
 } 
+// 좌표값을 받아 맵의 오른쪽 부분인지 위쪽 부분인지 등등을 판단하여 주는 함수. 
 
 void move_after(int pV) {
 	map[Player[pV].pos_y][Player[pV].pos_x]=Player[pV].value;
 }
+// 플레이어가 움직인 후를 표시하기 위한 함수.
+ 
 void move_before(int pV, char xy, char updown) {
 	if(xy=='x') {
 		if(updown=='u') map[Player[pV].pos_y][Player[pV].pos_x-4]=0;
@@ -132,11 +135,14 @@ void move_before(int pV, char xy, char updown) {
 		else map[Player[pV].pos_y+4][Player[pV].pos_x]=0;
 	}
 }
+// 움직이기 전의 플레이어를 감추기 위한 함수. 
+
 void move(int pV, char xy, char updown) {
 	move_after(pV);
 	move_before(pV, xy, updown);
 }
-
+// after와 before를 연결.
+ 
 void player_move(int pV) {
 	pV-=1;
 	int movePoint;
@@ -172,39 +178,13 @@ void player_move(int pV) {
 			move(pV, 'x', 'd');	
 		}
 		map_print();
-	}
-	
-
-		
-	
+	}	
 }
 // 각 플레이어가 움직이게 하고 움직일 때마다 맵 변수 값 변경. 
 
-int main() {
-	int pV;
-	first_setting();
-	map_set();
-	map_print();
-	
-	srand(time(NULL));
-	
-	while(1) {
-		scanf("%d", &pV);
-		getchar();
-		player_move(pV);
-	}
-	
-	system("pause");
-	return 0;
+void gotoxy(int x,int y) {
+	COORD pos={x,y};
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos); 
 }
+// gotoxy함수. 
 
-
-
-void gotoxy(int x,int y)
-{
-
-COORD pos={x,y};
-
-SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos); 
-
-}
