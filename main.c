@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
 	system("pause");
 	
 	return 0;
+	//2020.01.21 맵, 플레이어 이동 구현. 
 }
 
 
