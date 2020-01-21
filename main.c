@@ -3,8 +3,8 @@
 #include <conio.h>
 #include <windows.h>
 #include <stdlib.h>
-#define MAX_Y 45
-#define MAX_X 45
+#define MAX_Y 37
+#define MAX_X 37
 #define RED SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE), 12);
 #define BLUE SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE), 9);
 #define GREEN SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE), 10);
@@ -27,6 +27,13 @@ struct player_stat{
 }Player[4];
 // 구조체로 각 플레이어 선언. 
 
+struct place_stat {
+	int price; // 장소들의 가격. 
+	int value; // 장소들을 구별할 키값 키값 : (MAX_Y, MAX_X 좌표를 4로 나눈 값 -  X, Y를 4로 나눈 값) 
+	char name[10]; // 이름 
+}Place[10];
+// 구조체로 각 장소들 선언. 
+
 void first_setting() {
 	int i, temp_x, temp_y;
 	for(i=0; i<4; i++) {
@@ -34,11 +41,11 @@ void first_setting() {
 		Player[i].money=10000;
 		if(i==0) {
 			temp_x=1;
-			temp_y=43;
+			temp_y=MAX_Y-2;
 		}
-		else if(i==1) temp_y=41;
+		else if(i==1) temp_y=MAX_Y-4;
 		else if(i==2) temp_x=3;
-		else if(i==3) temp_y=43;
+		else if(i==3) temp_y=MAX_Y-2;
 		Player[i].pos_x=temp_x;
 		Player[i].pos_y=temp_y;
 	}
@@ -48,21 +55,21 @@ void first_setting() {
 
 void map_set() { 
 	int i, j;
-	map[43][1]=Player[0].value;
-	map[41][1]=Player[1].value;
-	map[41][3]=Player[2].value;
-	map[43][3]=Player[3].value;
+	map[MAX_Y-2][1]=Player[0].value;
+	map[MAX_Y-4][1]=Player[1].value;
+	map[MAX_Y-4][3]=Player[2].value;
+	map[MAX_Y-2][3]=Player[3].value;
 	for(i=0; i<MAX_Y; i++) {
 		for(j=0; j<MAX_X; j++) {
-			if(i==0 || i==MAX_Y-1 || i==4 || i==40) map[i][j]=1;	
-			else if(i<4 || i>40) {
+			if(i==0 || i==MAX_Y-1 || i==4 || i==MAX_Y-5) map[i][j]=1;	
+			else if(i<4 || i>MAX_Y-5) {
 				if(j==0 || j==MAX_X-1 || j%4==0) map[i][j]=1;			
 			}
 			else if(i%4==0) {
-				if(j<=4 || j>=40) map[i][j]=1;				
+				if(j<=4 || j>=MAX_X-5) map[i][j]=1;				
 			}
 			else {
-				if((j==0 || j==MAX_X-1 || j==4 || j==40)) map[i][j]=1;			
+				if((j==0 || j==MAX_X-1 || j==4 || j==MAX_X-5)) map[i][j]=1;			
 			}	
 		}		
 	}
@@ -118,8 +125,8 @@ void map_print() {
 
 int scan_dr(int x, int y) {
 	if(x<4 && y>4) return L;
-	else if(x<40 && y<4) return U;
-	else if(x>40 && y>40) return D;
+	else if(x<MAX_X-5 && y<4) return U;
+	else if(x>MAX_X-5 && y>MAX_Y-5) return D;
 } 
 // 좌표값을 받아 맵의 오른쪽 부분인지 위쪽 부분인지 등등을 판단하여 주는 함수. 
 
