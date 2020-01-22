@@ -16,8 +16,12 @@
 #define D 4 // RightUp ( 오른쪽 위 ) 
 #define TRUE 1
 #define FALSE 0
+#define FIRSTPLACE 
+
 
 int map[MAX_Y][MAX_X] = {0};
+int turn_value = 0;
+
 
 struct player_stat{
 	int value;
@@ -28,8 +32,9 @@ struct player_stat{
 // 구조체로 각 플레이어 선언. 
 
 struct place_stat {
+	int owner_value; // 땅을 구입한 플레이어의 키값을 저장. 
 	int price; // 장소들의 가격. 
-	int value; // 장소들을 구별할 키값 키값 : (MAX_Y, MAX_X 좌표를 4로 나눈 값 -  X, Y를 4로 나눈 값) 
+	int pos_value; // 장소들을 구별할 키값 키값 : (MAX_Y, MAX_X 좌표를 4로 나눈 값 -  X, Y를 4로 나눈 값) 
 	char name[10]; // 이름 
 }Place[10];
 // 구조체로 각 장소들 선언. 
@@ -84,27 +89,22 @@ void map_print() {
 			switch(map[i][j]) {
 				case 1: {
 					WHITE;
-					
 					break;
 				}
 				case 2: {
 					RED;
-					
 					break;
 				}
 				case 3: {
-					BLUE;
-					
+					BLUE;					
 					break;
 				}
 				case 4: {
-					GREEN;
-					
+					GREEN;					
 					break;
 				}
 				case 5: {
-					YELLOW;
-					
+					YELLOW;					
 					break;
 				}
 				default: {
@@ -120,13 +120,16 @@ void map_print() {
 		}
 		putchar('\n');
 	}
+	
+	
 }
 // 각 플레이어 변수 등등 비교하여 맵을 그리기
 
 int scan_dr(int x, int y) {
 	if(x<4 && y>4) return L;
 	else if(x<MAX_X-5 && y<4) return U;
-	else if(x>MAX_X-5 && y>MAX_Y-5) return D;
+	else if(x>MAX_X-5 && y<MAX_Y-5) return R;
+	else return D;
 } 
 // 좌표값을 받아 맵의 오른쪽 부분인지 위쪽 부분인지 등등을 판단하여 주는 함수. 
 
@@ -159,7 +162,6 @@ void player_move(int pV) {
 	int x, y;
 	int i;
 	movePoint=1+rand()%6;
-	
 	
 	
 	for(i=0; i<movePoint; i++) {
@@ -204,6 +206,14 @@ void GameStart() {
 	
 }
 
+void NextTurn() {
+	printf("\n===ENTER===");
+	getchar();
+	if(turn_value==4) turn_value=1;
+	else turn_value++;
+	printf("\n%d플레이어님의 차례입니다.", turn_value);
+}
+
 int main(int argc, char *argv[]) {
 	int pV;
 	
@@ -213,9 +223,13 @@ int main(int argc, char *argv[]) {
 	
 	
 	while(1) {
-		scanf("%d", &pV);
+		
+		NextTurn();
+		
+		printf("\n주사위를 던지려면 ENTER를 입력하세요!\n");
 		getchar();
-		player_move(pV);
+		player_move(turn_value);
+		
 		
 	}
 	
